@@ -1,13 +1,29 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
-const validateData = ({ passwordFirst, passwordSecond, Error }) => {
-    let valid = true
 
-    if (passwordFirst !== passwordSecond){
-        valid = false
+const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond, Error}) => {
+
+    if (passwordFirst !== passwordSecond) {
         Error.passwordSecond = 'Passwords must match'
+        return false
     }
-    return valid
+    const options = {headers: {crossOrigin : true, withCredentials: false}}
+    return axios.post('https://chotuve-auth-server-develop.herokuapp.com/admins',
+                                      {first_name: firstName,
+                                            last_name: lastName,
+                                            email: email,
+                                            password: passwordFirst}, options)
+        .then(res => {
+            console.log(res)
+            return true
+        })
+        .catch(error => {
+            console.log(error.response.data)
+            Error.email = 'An admin with that email already exists'
+            return false
+        })
+
 }
 
 export default class SignupForm extends Component {
@@ -29,15 +45,16 @@ export default class SignupForm extends Component {
             }
         }
     }
-    onSubmit = e => {
+    onSubmit = async e => {
         e.preventDefault();
-        if (validateData({...this.state})) {
+        console.log(this)
+        console.log(e)
+        console.log(e.Error)
+        const valid = await validateData({...this.state})
+        if (valid === true) {
             this.props.onSignup()
             console.log('Success')
             this.props.history.push('/')
-        }
-        else{
-            this.setState( { [e.target.Error]: e.target.value})
         }
 
     };
