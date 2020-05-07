@@ -47,14 +47,17 @@ export default class SignupForm extends Component {
     }
     onSubmit = async e => {
         e.preventDefault();
-        console.log(this)
-        console.log(e)
-        console.log(e.Error)
+        e.persist()
         const valid = await validateData({...this.state})
         if (valid === true) {
             this.props.onSignup()
             console.log('Success')
             this.props.history.push('/')
+        }
+        else{
+            this.setState({
+            [e.target.Error]: e.target.value,
+        })
         }
 
     };
