@@ -9,7 +9,8 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
         return false
     }
     const options = {headers: {crossOrigin : true, withCredentials: false}}
-    return axios.post('https://chotuve-auth-server-develop.herokuapp.com/admins',
+    /* TODO: setear como variable de entorno. */
+    return axios.post('https://chotuve-auth-server-prod.herokuapp.com/admins',
                                       {first_name: firstName,
                                             last_name: lastName,
                                             email: email,
