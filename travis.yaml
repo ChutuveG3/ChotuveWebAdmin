@@ -1,0 +1,20 @@
+language: node_js
+
+node_js:
+  - "12"
+
+script:
+  - npm test
+  - npm run build
+
+deploy:
+  - provider: heroku
+    app: $HEROKU_APP_NAME_PROD
+    api_key: $HEROKU_API_KEY
+    on:
+      branch: master
+  - provider: heroku
+    app: $HEROKU_APP_NAME_STAG
+    api_key: $HEROKU_API_KEY
+    on:
+      branch: develop
