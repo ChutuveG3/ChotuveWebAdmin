@@ -4,6 +4,7 @@ node_js:
   - "12"
 
 script:
+  - npm cache clean --force
   - npm test
   - npm run build
 
