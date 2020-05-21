@@ -25,7 +25,7 @@ class LoginForm extends Component {
         Error.email = 'Email address is invalid'
         return false
     }
-    const options = {headers: {crossOrigin : true, withCredentials: false}}
+    // const options = {headers: {crossOrigin : true, withCredentials: false}}
     const requestConfig = {
             method: 'POST',
             body: JSON.stringify(this.state),
