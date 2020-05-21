@@ -1,4 +1,5 @@
 # Chotuve Web Admin
+[![Build Status](https://travis-ci.org/ChutuveG3/ChotuveWebAdmin.svg?branch=master)](https://travis-ci.org/ChutuveG3/ChotuveWebAdmin)
 
 ## Env file
 Para declarar variables de entorno, en la base del proyecto,
