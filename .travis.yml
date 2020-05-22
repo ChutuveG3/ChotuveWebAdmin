@@ -8,14 +8,30 @@ script:
   - npm test
   - npm run build
 
+services:
+  - docker
+
+before_install:
+  - wget -q0- https://toolbelt.heroku.com/install.sh | sh
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
+
 deploy:
-  - provider: heroku
-    app: $HEROKU_APP_NAME_PROD
-    api_key: $HEROKU_API_KEY
+  - provider: script
+    script:
+      docker build -t chotuveg3/web-admin-develop .;
+      docker tag chotuveg3/web-admin-develop registry.heroku.com/$HEROKU_APP_NAME_DEVELOP/web;
+      docker push chotuveg3/web-admin-develop;
+      docker push registry.heroku.com/$HEROKU_APP_NAME_DEVELOP/web;
+      heroku container:release web --app $HEROKU_APP_NAME_DEVELOP;
+    on:
+      branch: docker
+  - provider: script
+    script:
+      docker build -t chotuveg3/web-admin-prod .;
+      docker tag chotuveg3/web-admin-prod registry.heroku.com/$HEROKU_APP_NAME_PRODUCTION/web;
+      docker push chotuveg3/web-admin-prod;
+      docker push registry.heroku.com/$HEROKU_APP_NAME_PRODUCTION/web;
+      heroku container:release web --app $HEROKU_APP_NAME_PRODUCTION;
     on:
       branch: master
-  - provider: heroku
-    app: $HEROKU_APP_NAME_STAG
-    api_key: $HEROKU_API_KEY
-    on:
-      branch: develop

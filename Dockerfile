@@ -16,5 +16,6 @@ RUN npm install react-scripts
 # add app
 COPY . ./
 
+EXPOSE 5000
 # start app
-CMD ["npm", "start"]
+CMD npm start
