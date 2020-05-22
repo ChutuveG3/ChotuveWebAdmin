@@ -1,3 +1,6 @@
 export function getSetting(variableName) {
-    return process.env[variableName];
+    const variablePrefix = 'REACT_APP_';
+    const variableFullName = variablePrefix + variableName;
+
+    return process.env[variableFullName];
 }
