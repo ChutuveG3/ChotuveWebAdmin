@@ -21,29 +21,29 @@ class LoginForm extends Component {
         }
     }
     validateData = ({ email, password, Error }) => {
-    if (!regExp.test(email)){
-        Error.email = 'Email address is invalid'
-        return false
-    }
-    const options = {headers: {crossOrigin : true, withCredentials: false}}
-    const requestConfig = {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {'Content-Type': 'application/json'}
-        };
-    const url = getSetting('API_LOGIN_URL')
-    return axios.post(url,{email: email,
-                                password: password}, requestConfig)
-        .then(res => {
-            console.log(res)
-            localStorage.setItem('token', res.data.token)
-            return true
-        })
-        .catch(error => {
-            console.log(error.response.data)
-            Error.email = "Email and password don't match"
+        if (!regExp.test(email)){
+            Error.email = 'Email address is invalid'
             return false
-        })
+        }
+        const options = {headers: {crossOrigin : true, withCredentials: false}}
+        const requestConfig = {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                headers: {'Content-Type': 'application/json'}
+            };
+        const url = getSetting('AUTH_BASE_URL') + '/admins/sessions'
+        return axios.post(url,{email: email,
+                                    password: password}, requestConfig)
+            .then(res => {
+                console.log(res)
+                localStorage.setItem('token', res.data.token)
+                return true
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                Error.email = "Email and password don't match"
+                return false
+            })
     }
     onSubmit = async e => {
         e.preventDefault();
