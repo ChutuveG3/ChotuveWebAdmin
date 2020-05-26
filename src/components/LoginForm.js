@@ -1,27 +1,13 @@
 import React, { Component } from "react";
+import {getSetting} from "../settings";
+import axios from "axios";
+import {withRouter} from 'react-router-dom'
 
 const regExp = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+    /^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[A-Za-z.]+$/
 )
 
-const validateData = ({ email, password, Error }) => {
-    let valid = true
-    if (!regExp.test(email)){
-        valid = false
-        Error.email = 'Email address is invalid'
-    }
-    if (email.length === 0){
-        valid = false
-        Error.email = 'Email address is required'
-    }
-    if (password.length === 0){
-        valid = false
-        Error.password = 'Password is required'
-    }
-    return valid
-}
-
-export default class LoginForm extends Component {
+class LoginForm extends Component {
     constructor(props) {
         super(props)
 
@@ -34,13 +20,44 @@ export default class LoginForm extends Component {
             }
         }
     }
-    onSubmit = e => {
+    validateData = ({ email, password, Error }) => {
+        if (!regExp.test(email)){
+            Error.email = 'Email address is invalid'
+            return false
+        }
+        const options = {headers: {crossOrigin : true, withCredentials: false}}
+        const requestConfig = {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                headers: {'Content-Type': 'application/json'}
+            };
+        const url = getSetting('AUTH_BASE_URL') + '/admins/sessions'
+        return axios.post(url,{email: email,
+                                    password: password}, requestConfig)
+            .then(res => {
+                console.log(res)
+                localStorage.setItem('token', res.data.token)
+                return true
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                Error.email = "Email and password don't match"
+                return false
+            })
+    }
+    onSubmit = async e => {
         e.preventDefault();
-        if (validateData({...this.state})){
+        e.persist()
+        const valid = await this.validateData({...this.state})
+        if (valid === true){
             console.log('Login')
+            this.props.history.push('/')
         }
         else{
             console.log('Fail')
+            this.setState({
+            [e.target.Error]: e.target.value,
+        })
         }
 
     };
@@ -107,3 +124,4 @@ export default class LoginForm extends Component {
         );
     }
 }
+export default withRouter(LoginForm)

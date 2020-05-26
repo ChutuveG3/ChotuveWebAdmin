@@ -1,15 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import App from "./App";
+import Routes from "./routes/Routes";
 import * as serviceWorker from "./serviceWorker";
-import history from "./history";
 
 ReactDOM.render(
-    <BrowserRouter history = {history}>
-        <App />
-    </BrowserRouter>,
+    <React.StrictMode>
+        <Routes />
+    </React.StrictMode>,
     document.getElementById("root")
 );
 

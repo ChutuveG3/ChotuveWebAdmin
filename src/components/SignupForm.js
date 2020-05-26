@@ -1,20 +1,25 @@
 import React, { Component } from "react";
 import axios from 'axios';
-
+import {getSetting} from "../settings";
+import {withRouter} from 'react-router-dom'
 
 const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond, Error}) => {
 
+    if (passwordFirst.length < 6){
+        Error.passwordFirst = 'Password must be at least 6 characters'
+        return false
+    }
     if (passwordFirst !== passwordSecond) {
         Error.passwordSecond = 'Passwords must match'
         return false
     }
     const options = {headers: {crossOrigin : true, withCredentials: false}}
-    /* TODO: setear como variable de entorno. */
-    return axios.post('https://chotuve-auth-server-prod.herokuapp.com/admins',
-                                      {first_name: firstName,
-                                            last_name: lastName,
-                                            email: email,
-                                            password: passwordFirst}, options)
+
+    const url = getSetting('AUTH_BASE_URL') + '/admins'
+    return axios.post(url,{first_name: firstName,
+                                last_name: lastName,
+                                email: email,
+                                password: passwordFirst}, options)
         .then(res => {
             console.log(res)
             return true
@@ -27,7 +32,7 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
 
 }
 
-export default class SignupForm extends Component {
+class SignupForm extends Component {
     constructor(props) {
         super(props)
 
@@ -48,14 +53,17 @@ export default class SignupForm extends Component {
     }
     onSubmit = async e => {
         e.preventDefault();
-        console.log(this)
-        console.log(e)
-        console.log(e.Error)
+        e.persist()
         const valid = await validateData({...this.state})
         if (valid === true) {
-            this.props.onSignup()
             console.log('Success')
+            localStorage.setItem('token', 'sapeeee')
             this.props.history.push('/')
+        }
+        else{
+            this.setState({
+            [e.target.Error]: e.target.value,
+        })
         }
 
     };
@@ -160,3 +168,5 @@ export default class SignupForm extends Component {
         );
     }
 }
+
+export default withRouter(SignupForm)
