@@ -22,6 +22,7 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
                                 password: passwordFirst}, options)
         .then(res => {
             console.log(res)
+            localStorage.setItem('token', res.data.token)
             return true
         })
         .catch(error => {
@@ -57,7 +58,6 @@ class SignupForm extends Component {
         const valid = await validateData({...this.state})
         if (valid === true) {
             console.log('Success')
-            localStorage.setItem('token', 'sapeeee')
             this.props.history.push('/')
         }
         else{
