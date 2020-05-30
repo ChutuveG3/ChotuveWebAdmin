@@ -19,7 +19,7 @@ before_install:
 deploy:
   - provider: script
     script:
-      docker build -t chotuveg3/web-admin-develop .;
+      docker build -t chotuveg3/web-admin-develop . -f Dockerfile.prod;
       docker tag chotuveg3/web-admin-develop registry.heroku.com/$HEROKU_APP_NAME_DEVELOP/web;
       docker push chotuveg3/web-admin-develop;
       docker push registry.heroku.com/$HEROKU_APP_NAME_DEVELOP/web;
