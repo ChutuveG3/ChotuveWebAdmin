@@ -15,7 +15,8 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
     }
     const options = {headers: {crossOrigin : true, withCredentials: false}}
     const url = getSetting('AUTH_BASE_URL') + '/admins'
-    console.log(url)
+    console.log('Sing up url:' + url)
+
     return axios.post(url,{first_name: firstName,
                                 last_name: lastName,
                                 email: email,

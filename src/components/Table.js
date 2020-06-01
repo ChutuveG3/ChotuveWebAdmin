@@ -7,12 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
-
-// Generate Order Data
-function createData(id, username, firstName, lastName, email, birthdate) {
-  return { id, username, firstName, lastName, email, birthdate };
-}
-
+import {getSetting} from "../settings";
 
 
 export default class UsersTable extends Component{
@@ -21,24 +16,21 @@ export default class UsersTable extends Component{
         this.state = {rows: [], isLoading: true}
     }
 
-    async componentDidMount() {
-        try {
-            const resp = await axios.get("https://www.mocky.io/v2/5ed460073300005f00f7a146")
-            const usersList = resp.json()
-            const users = []
-            for (let i = 0; i < usersList.size; i++) {
-                users.concat(createData(i, resp.data.username, resp.data.first_name, resp.data.last_name,
-                    resp.data.email, resp.data.birthdate))
-            }
-            this.setState({rows: users, isLoading: false})
-        } catch (err) {
-            console.log(err)
-        }
+    componentDidMount = async () => {
+        const url = "https://www.mocky.io/v2/5ed460073300005f00f7a146/users"
+        /*const url = getSetting('AUTH_BASE_URL') + '/users'*/
+        await axios.get(url)
+            .then(res => {
+                this.setState({rows: res.data, isLoading: false})
+            })
     }
 
     render() {
-        const {users, loading} = this.state
-        {if (!loading){
+        const loading = this.state.isLoading
+        {
+            if (loading) {
+                return <h3>Loading...</h3>
+            }
             return (
             <React.Fragment>
                 <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -57,10 +49,10 @@ export default class UsersTable extends Component{
                     <TableBody>
                         {this.state.rows.map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell>{row.firstName}</TableCell>
-                                <TableCell>{row.lastName}</TableCell>
+                                <TableCell>{row.first_name}</TableCell>
+                                <TableCell>{row.last_name}</TableCell>
                                 <TableCell>{row.email}</TableCell>
-                                <TableCell>{row.birthdate}</TableCell>
+                                <TableCell>{row.date_of_birth}</TableCell>
                                 <TableCell align="right">{row.username}</TableCell>
                             </TableRow>
                         ))}
@@ -72,11 +64,6 @@ export default class UsersTable extends Component{
                     </Link>
                 </div>
             </React.Fragment>
-        )
-        }
-        else {
-            return <h3>Loading...</h3>
-        }}
-
+        )}
     }
 }
