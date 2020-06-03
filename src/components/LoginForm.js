@@ -31,7 +31,8 @@ class LoginForm extends Component {
                 body: JSON.stringify(this.state),
                 headers: {'Content-Type': 'application/json'}
             };
-        const url = getSetting('AUTH_BASE_URL') + '/admins/sessions'
+        //const url = getSetting('AUTH_BASE_URL') + '/admins/sessions'
+        const url = 'https://chotuve-auth-server-develop.herokuapp.com' + '/admins/sessions'
         return axios.post(url,{email: email,
                                     password: password}, requestConfig)
             .then(res => {

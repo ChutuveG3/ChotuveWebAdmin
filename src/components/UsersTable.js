@@ -35,8 +35,8 @@ export default class UsersTable extends Component{
                                     <TableCell>{row.first_name}</TableCell>
                                     <TableCell>{row.last_name}</TableCell>
                                     <TableCell>{row.email}</TableCell>
-                                    <TableCell>{row.date_of_birth}</TableCell>
-                                    <TableCell align="right">{row.username}</TableCell>
+                                    <TableCell>{row.birthdate}</TableCell>
+                                    <TableCell align="right">{row.user_name}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
