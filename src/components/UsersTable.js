@@ -16,7 +16,7 @@ export default class UsersTable extends Component{
         return (
             <div className="users-list">
                 <React.Fragment>
-                    <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                    <Typography component="h1" variant="h6" color="primary" gutterBottom>
                         Users
                     </Typography>
                     <Table size="small">
@@ -31,7 +31,7 @@ export default class UsersTable extends Component{
                         </TableHead>
                         <TableBody>
                             {this.state.rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow key={row.user_name}>
                                     <TableCell>{row.first_name}</TableCell>
                                     <TableCell>{row.last_name}</TableCell>
                                     <TableCell>{row.email}</TableCell>

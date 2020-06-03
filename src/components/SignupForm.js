@@ -59,7 +59,7 @@ class SignupForm extends Component {
         const valid = await validateData({...this.state})
         if (valid === true) {
             console.log('Success')
-            this.props.history.push('/')
+            this.props.history.push('/sign-in')
         }
         else{
             this.setState({

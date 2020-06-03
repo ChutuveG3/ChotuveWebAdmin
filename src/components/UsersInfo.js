@@ -12,23 +12,20 @@ export default class UsersInfo extends Component{
     }
 
     componentDidMount = async () => {
-        const url = 'https://chotuve-auth-server-develop.herokuapp.com/users'
+        const url = getSetting('AUTH_BASE_URL') + '/users'
         const headers = { headers: { authorization: localStorage.getItem("token")}}
         await axios.get(url, headers)
             .then(res => {
-                console.log(res)
                 this.setState({rows: res.data, isLoading: false})
             }).catch(err => console.log(err))
     }
 
     render() {
         const loading = this.state.isLoading
-        {
-            if (loading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
-            else return (<div>
-                <CountDisplay count = {this.state.rows.length}/>
-                <UsersTable rows = {this.state.rows}/>
-            </div>)
-        }
+        if (loading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
+        else return (<div>
+            <CountDisplay count = {this.state.rows.length}/>
+            <UsersTable rows = {this.state.rows}/>
+        </div>)
     }
 }
