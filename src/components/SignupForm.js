@@ -14,6 +14,7 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
         return false
     }
     const options = {headers: {crossOrigin : true, withCredentials: false}}
+
     const url = getSetting('AUTH_BASE_URL') + '/admins'
     console.log('Sing up url:' + url)
 
@@ -169,4 +170,5 @@ class SignupForm extends Component {
         );
     }
 }
+
 export default withRouter(SignupForm)
