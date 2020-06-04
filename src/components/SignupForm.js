@@ -16,12 +16,15 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
     const options = {headers: {crossOrigin : true, withCredentials: false}}
 
     const url = getSetting('AUTH_BASE_URL') + '/admins'
+    console.log('Sing up url:' + url)
+
     return axios.post(url,{first_name: firstName,
                                 last_name: lastName,
                                 email: email,
                                 password: passwordFirst}, options)
         .then(res => {
             console.log(res)
+            localStorage.setItem('token', res.data.token)
             return true
         })
         .catch(error => {
@@ -57,8 +60,7 @@ class SignupForm extends Component {
         const valid = await validateData({...this.state})
         if (valid === true) {
             console.log('Success')
-            localStorage.setItem('token', 'sapeeee')
-            this.props.history.push('/')
+            this.props.history.push('/sign-in')
         }
         else{
             this.setState({
