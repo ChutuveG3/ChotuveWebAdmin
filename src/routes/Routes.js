@@ -12,7 +12,8 @@ class Routes extends Component {
     return (
         <Router >
             <div className="App">
-              <Route exact path='/' render = {props => localStorage.getItem('token') ?
+              <Route exact path='/' render = {props => (localStorage.getItem('token')
+                                                        && localStorage.getItem('email')) ?
                     <Redirect to={{pathname: "/home"}}/> :
                     <Login {...props}/>}
               />

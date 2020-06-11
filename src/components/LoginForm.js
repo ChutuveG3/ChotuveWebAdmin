@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import {getSetting} from "../settings";
-import axios from "axios";
+import {authApi} from "../api/axios";
 import {withRouter} from 'react-router-dom'
 
-const regExp = RegExp(
-    /^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[A-Za-z.]+$/
+const EMAIL_FORMAT = RegExp(
+"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
 )
 
 class LoginForm extends Component {
@@ -21,25 +21,22 @@ class LoginForm extends Component {
         }
     }
     validateData = ({ email, password, Error }) => {
-        if (!regExp.test(email)){
+        if (!EMAIL_FORMAT.test(email)){
             Error.email = 'Email address is invalid'
+            console.log(email)
             return false
         }
-        const requestConfig = {
-                method: 'POST',
-                body: JSON.stringify(this.state),
-                headers: {'Content-Type': 'application/json'}
-            };
-        const url = getSetting('AUTH_BASE_URL') + '/admins/sessions'
-        return axios.post(url,{email: email,
-                                    password: password}, requestConfig)
+        return authApi.post('/admins/sessions',{email: email,
+                                    password: password})
             .then(res => {
                 console.log(res)
+                localStorage.setItem('email', email)
+                localStorage.setItem('password', password)
                 localStorage.setItem('token', res.data.token)
                 return true
             })
             .catch(error => {
-                console.log(error.response.data)
+                console.log(error)
                 Error.email = "Email and password don't match"
                 return false
             })
