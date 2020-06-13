@@ -17,5 +17,7 @@ RUN npm install react-scripts
 COPY . ./
 
 EXPOSE 3000
+
+ENV CI true
 # start app
 CMD ["npm", "start"]
