@@ -30,8 +30,6 @@ class LoginForm extends Component {
                                     password: password})
             .then(res => {
                 console.log(res)
-                localStorage.setItem('email', email)
-                localStorage.setItem('password', password)
                 localStorage.setItem('token', res.data.token)
                 return true
             })
