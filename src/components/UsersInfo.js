@@ -3,6 +3,7 @@ import axios from "axios";
 import {getSetting} from "../settings";
 import CountDisplay from "./CountDisplay";
 import UsersTable from "./UsersTable";
+import {authApi} from "../api/axios";
 
 
 export default class UsersInfo extends Component{
@@ -12,9 +13,8 @@ export default class UsersInfo extends Component{
     }
 
     componentDidMount = async () => {
-        const url = getSetting('AUTH_BASE_URL') + '/users'
         const headers = { headers: { authorization: localStorage.getItem("token")}}
-        await axios.get(url, headers)
+        await authApi.get("/users", headers)
             .then(res => {
                 this.setState({rows: res.data, isLoading: false})
             }).catch(err => console.log(err))
