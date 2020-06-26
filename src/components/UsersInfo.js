@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import axios from "axios";
-import {getSetting} from "../settings";
 import CountDisplay from "./CountDisplay";
 import UsersTable from "./UsersTable";
 import {authApi} from "../api/axios";

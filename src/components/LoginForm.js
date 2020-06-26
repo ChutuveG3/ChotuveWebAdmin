@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import {getSetting} from "../settings";
 import {authApi} from "../api/axios";
 import {withRouter} from 'react-router-dom'
 
