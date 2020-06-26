@@ -22,7 +22,7 @@ class LoginForm extends Component {
     }
     validateData = ({ email, password, Error }) => {
         if (!regExp.test(email)){
-            Error.email = 'Email address is invalid'
+            Error.email = 'Email address is invalid!!!!!!!'
             return false
         }
         // const options = {headers: {crossOrigin : true, withCredentials: false}}

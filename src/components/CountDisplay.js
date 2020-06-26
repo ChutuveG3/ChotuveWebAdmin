@@ -10,6 +10,8 @@ export default class CountDisplay extends Component{
             <div className="users-count">
                 <h1 style={{fontSize: '300%'}}>{this.state.count}</h1>
                 <p>Total users in the site</p>
+                <p>Total users in the site</p>
+                <p>Total users in the site</p>
             </div>
         );
     }
