@@ -9,19 +9,19 @@ import {PrivateRoute} from "./PrivateRoute";
 
 class Routes extends Component {
   render() {
-    return (
-        <Router >
-            <div className="App">
-              <Route exact path='/' render = {props => localStorage.getItem('token') ?
-                    <Redirect to={{pathname: "/home"}}/> :
-                    <Login {...props}/>}
-              />
-              <PrivateRoute exact path={"/home"} component={Home}/>
-              <Route exact path="/sign-in" component={Login} />
-              <Route exact path="/sign-up" component={Signup} />
-            </div>
-      </Router>
-  );
+      return (
+          <Router >
+              <div className="App">
+                  <Route exact path='/' render = {props => localStorage.getItem('token') ?
+                        <Redirect to={{pathname: "/home"}}/> :
+                        <Login {...props}/>}
+                  />
+                  <PrivateRoute exact path={"/home"} component={Home}/>
+                  <Route exact path="/sign-in" component={Login} />
+                  <Route exact path="/sign-up" component={Signup} />
+              </div>
+          </Router>
+      );
   }
 }
 
