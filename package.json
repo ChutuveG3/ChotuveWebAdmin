@@ -40,6 +40,8 @@
     ]
   },
   "devDependencies": {
+    "@material-ui/icons": "^4.9.1",
+    "clsx": "^1.1.1",
     "history": "^4.10.1"
   }
 }
