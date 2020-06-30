@@ -12,6 +12,12 @@ export const mediaApi = axios.create({
     headers: {'Content-Type': 'application/json'}
 });
 
+export const appApi = axios.create({
+    baseURL: getSetting('APP_BASE_URL'),
+    headers: {'Content-Type': 'application/json'}
+});
+
+
 authApi.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
