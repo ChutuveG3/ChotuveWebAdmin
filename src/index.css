@@ -114,8 +114,8 @@ html, .App, #root, .auth-wrapper {
 }
 .list {
   width: 250px;
-  margin-top: 10px
 }
+
 .forgot-password a {
   color: #167bff;
 }
