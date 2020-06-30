@@ -4,7 +4,7 @@ import UsersTable from "./UsersTable";
 import {authApi} from "../api/axios";
 
 
-export default class UsersInfo extends Component{
+export default class UsersInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {rows: [], isLoading: true}
@@ -22,7 +22,7 @@ export default class UsersInfo extends Component{
         const loading = this.state.isLoading
         if (loading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
         else return (<div>
-            <CountDisplay count = {this.state.rows.length}/>
+            <CountDisplay count = {this.state.rows.length} resource = {'users'}/>
             <UsersTable rows = {this.state.rows}/>
         </div>)
     }

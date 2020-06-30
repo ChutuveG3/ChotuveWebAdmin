@@ -14,7 +14,7 @@ export default class UsersTable extends Component{
     }
     render() {
         return (
-            <div className="users-list">
+            <div className="format-table">
                 <React.Fragment>
                     <Typography component="h1" variant="h6" color="primary" gutterBottom>
                         Users

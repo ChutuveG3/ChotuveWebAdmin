@@ -68,7 +68,7 @@ html, .App, #root, .auth-wrapper {
   transition: all .3s;
 }
 
-.users-list {
+.format-table {
   width: 90vw;
   margin: 2px auto 30px;
   background: #ffffff;

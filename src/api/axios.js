@@ -2,8 +2,13 @@ import axios from "axios";
 import {getSetting} from "../settings";
 import Swal from 'sweetalert2'
 
-const authApi = axios.create({
+export const authApi = axios.create({
     baseURL: getSetting('AUTH_BASE_URL'),
+    headers: {'Content-Type': 'application/json'}
+});
+
+export const mediaApi = axios.create({
+    baseURL: getSetting('MEDIA_BASE_URL'),
     headers: {'Content-Type': 'application/json'}
 });
 
@@ -24,5 +29,3 @@ authApi.interceptors.response.use(function (response) {
         return Promise.reject(error);
     }
 });
-
-export {authApi};

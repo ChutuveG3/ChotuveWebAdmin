@@ -3,7 +3,7 @@ import HomeNavBar from "../components/HomeNavBar";
 import UsersInfo from "../components/UsersInfo";
 import {DrawerMenuList} from "../components/DrawerMenuList";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import {VideoInfo} from "../components/VideoInfo";
+import VideoInfo from "../components/VideoInfo";
 
 
 class Home extends Component{
@@ -37,9 +37,6 @@ class Home extends Component{
                     onClose={this.toggleDrawer(false)}
                     onOpen={this.toggleDrawer(true)}
                 >
-                    <div align="left" style={{paddingTop: "10px", paddingLeft: "17px"}}>
-                        <h3>Options</h3>
-                    </div>
                     <DrawerMenuList toggleDrawer={this.toggleDrawer} navigate={this.changeComponent}/>
                 </SwipeableDrawer>
             </div>

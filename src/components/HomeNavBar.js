@@ -17,9 +17,7 @@ class HomeNavBar extends Component {
                     <IconButton onClick={this.props.menuAction(true)}>
                         <MenuIcon />
                     </IconButton>
-                    <Link className="navbar-brand" to={"/sign-in"}>
-                        <img src={ChotuveLogoTransparent} alt={''}/>
-                    </Link>
+                    <img src={ChotuveLogoTransparent} alt={''}/>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul className="navbar-nav ml-auto">
                         <Link className="nav-link" to={'/'} onClick={this.logout}>Log out</Link>
