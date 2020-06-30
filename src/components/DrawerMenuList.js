@@ -5,7 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import VideoLibraryIcon from "@material-ui/icons/VideoLibrary";
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from "@material-ui/icons/People";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
 import React, {Component} from "react";
 
 export class DrawerMenuList extends Component {
@@ -30,9 +30,9 @@ export class DrawerMenuList extends Component {
                         <ListItemIcon>{<VideoLibraryIcon/>}</ListItemIcon>
                         <ListItemText primary={"Videos"}/>
                     </ListItem>
-                    <ListItem button onClick={this.props.navigate('log_out')} key={"LogOut"}>
-                        <ListItemIcon>{<ExitToAppIcon/>}</ListItemIcon>
-                        <ListItemText primary={"Log out"}/>
+                    <ListItem button onClick={this.props.navigate('servers')} key={"LogOut"}>
+                        <ListItemIcon>{<QueuePlayNextIcon/>}</ListItemIcon>
+                        <ListItemText primary={"Servers"}/>
                     </ListItem>
                 </List>
             </div>
