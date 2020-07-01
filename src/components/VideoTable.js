@@ -9,12 +9,20 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {bytesToStr, dateToStr} from "../utilities/StrUtilities";
 import classes from "react-bootstrap/cjs/Popover";
 import LinkIcon from '@material-ui/icons/Link';
+import PublishIcon from '@material-ui/icons/Publish'
 import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
 import Swal from "sweetalert2";
 import {appApi, mediaApi} from "../api/axios";
 import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
+import Toolbar from "@material-ui/core/Toolbar";
+import {Button} from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import TextField from "@material-ui/core/TextField";
 
 export default class VideoTable extends Component{
     constructor(props) {
@@ -22,7 +30,11 @@ export default class VideoTable extends Component{
         this.state = {
             rows: this.props.rows,
             page: 0,
-            rowsPerPage: 3
+            rowsPerPage: 3,
+            open: false,
+            videoURL: '',
+            fileName: '',
+            fileSize: '',
         }
     }
 
@@ -70,15 +82,117 @@ export default class VideoTable extends Component{
         this.setState({rowsPerPage: parseInt(event.target.value, 10)});
     }
 
+    handleClick = (open) => () => {
+        this.setState({open: open})
+    }
+
+    handleSubmit = e => {
+        e.preventDefault()
+        console.log("Sabe")
+        const headers = {headers: {authorization: localStorage.getItem("token")}};
+        return mediaApi.post('/videos',
+            {
+                download_url: this.state.videoURL,
+                datetime: Date.now().toString(),
+                file_name: this.state.fileName,
+                file_size: this.state.fileSize
+            }, headers)
+            .then(res => {
+                if (res.status === 200) {
+                    console.log("Que grande")
+                    this.setState({open: false})
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'The video has been uploaded',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err.response.data)
+            })
+    }
+
+    formValChange = e => {
+        e.preventDefault();
+
+        this.setState({
+            [e.target.name]: e.target.value,
+        })
+    };
+
     render() {
         const page = this.state.page
+        const open = this.state.open
         const rowsPerPage = this.state.rowsPerPage
+        const fileName = this.state.fileName
+        const videoURL = this.state.videoURL
+        const fileSize = this.state.fileSize
         return (
             <div className="format-table" >
                 <TableContainer style={{maxHeight: "300px"}}>
-                    <Typography component="h1" variant="h6" color="primary" gutterBottom>
-                        Videos
-                    </Typography>
+                    <Toolbar>
+                        <Typography variant="h6" color="primary">
+                            Videos
+                        </Typography>
+                        <div style={{marginLeft: "auto"}}>
+                            <Button
+                                onClick={this.handleClick(true)}
+                                variant="contained"
+                                color="primary"
+                                startIcon={<PublishIcon/>}
+                            >
+                                Add Video
+                            </Button>
+                            <Dialog fullWidth open={open} onClose={this.handleClick(false)}>
+                                <DialogTitle>
+                                    <h3>Add Video</h3>
+                                </DialogTitle>
+                                <DialogContent>
+                                    <form id="addVideoForm" onSubmit={this.handleSubmit}>
+                                        <label>URL</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Video URL"
+                                            type="url"
+                                            name="videoURL"
+                                            onChange={this.formValChange}
+                                            value={videoURL}
+                                            required
+                                        /><br/>
+                                        <label>File Name</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="File name"
+                                            name="fileName"
+                                            value={fileName}
+                                            onChange={this.formValChange}
+                                            type="text"
+                                            required
+                                        /><br/>
+                                        <label>File Size</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="File size"
+                                            name="fileSize"
+                                            value={fileSize}
+                                            onChange={this.formValChange}
+                                            type="text"
+                                            required
+                                        />
+                                    </form>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClick(false)} color="primary">Cancel</Button>
+                                    <Button type="submit" form="addVideoForm" color="primary">Submit</Button>
+                                </DialogActions>
+                            </Dialog>
+                        </div>
+                    </Toolbar>
                     <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
