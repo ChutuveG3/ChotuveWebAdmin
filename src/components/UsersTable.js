@@ -5,7 +5,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
-import Link from "@material-ui/core/Link";
 import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
 
@@ -31,11 +30,11 @@ export default class UsersTable extends Component{
         const rowsPerPage = this.state.rowsPerPage
         return (
             <div className="format-table">
-                <TableContainer>
+                <TableContainer style={{maxHeight: "300px"}}>
                     <Typography component="h1" variant="h6" color="primary" gutterBottom>
                         Users
                     </Typography>
-                    <Table size="small">
+                    <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
                                 <TableCell>First Name</TableCell>
@@ -58,14 +57,9 @@ export default class UsersTable extends Component{
                             ))}
                         </TableBody>
                     </Table>
-                    <div>
-                        <Link color="primary">
-                            See more users
-                        </Link>
-                    </div>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[2, 10, 20]}
+                    rowsPerPageOptions={[5, 10, 20]}
                     component="div"
                     count={this.state.rows.length}
                     rowsPerPage={this.state.rowsPerPage}

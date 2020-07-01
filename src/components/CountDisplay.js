@@ -8,7 +8,7 @@ export default class CountDisplay extends Component {
     render() {
         return (
             <div className="users-count">
-                <h1 style={{fontSize: '400%', fontStyle: 'bold'}}>{this.state.count}</h1>
+                <h1 style={{fontSize: '300%', fontStyle: 'bold'}}>{this.state.count}</h1>
                 <p>Total {this.props.resource}</p>
             </div>
         );

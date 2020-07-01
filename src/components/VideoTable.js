@@ -22,7 +22,7 @@ export default class VideoTable extends Component{
         this.state = {
             rows: this.props.rows,
             page: 0,
-            rowsPerPage: 5
+            rowsPerPage: 3
         }
     }
 
@@ -75,11 +75,11 @@ export default class VideoTable extends Component{
         const rowsPerPage = this.state.rowsPerPage
         return (
             <div className="format-table" >
-                <TableContainer>
+                <TableContainer style={{maxHeight: "300px"}}>
                     <Typography component="h1" variant="h6" color="primary" gutterBottom>
                         Videos
                     </Typography>
-                    <Table size="small">
+                    <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
                                 <TableCell>File Name</TableCell>
@@ -112,14 +112,9 @@ export default class VideoTable extends Component{
                             ))}
                         </TableBody>
                     </Table>
-                    <div>
-                        <Link color="primary">
-                            See more videos
-                        </Link>
-                    </div>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 20]}
+                    rowsPerPageOptions={[3, 10, 20]}
                     component="div"
                     count={this.state.rows.length}
                     rowsPerPage={this.state.rowsPerPage}
