@@ -97,7 +97,7 @@ export default class VideoTable extends Component{
                                     <TableCell>{dateToStr(row.datetime)}</TableCell>
                                     <TableCell>{bytesToStr(row.file_size)}</TableCell>
                                     <TableCell>
-                                        < Link href={row.download_url}>
+                                        < Link href={row.download_url} target="_blank" >
                                             <IconButton aria-label="video_link" className={classes.margin} color="primary">
                                                 <LinkIcon/>
                                             </IconButton>
