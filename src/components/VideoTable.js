@@ -13,11 +13,17 @@ import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
 import Swal from "sweetalert2";
 import {appApi, mediaApi} from "../api/axios";
+import TableContainer from "@material-ui/core/TableContainer";
+import TablePagination from "@material-ui/core/TablePagination";
 
 export default class VideoTable extends Component{
     constructor(props) {
         super(props);
-        this.state = {rows: this.props.rows}
+        this.state = {
+            rows: this.props.rows,
+            page: 0,
+            rowsPerPage: 5
+        }
     }
 
     async deleteVideo(video_id) {
@@ -56,10 +62,20 @@ export default class VideoTable extends Component{
         })
     }
 
+    handleChangePage = (event, newPage) =>{
+        this.setState({page: newPage})
+    }
+
+    handleChangePerPage = (event) => {
+        this.setState({rowsPerPage: parseInt(event.target.value, 10)});
+    }
+
     render() {
+        const page = this.state.page
+        const rowsPerPage = this.state.rowsPerPage
         return (
             <div className="format-table" >
-                <React.Fragment>
+                <TableContainer>
                     <Typography component="h1" variant="h6" color="primary" gutterBottom>
                         Videos
                     </Typography>
@@ -74,7 +90,8 @@ export default class VideoTable extends Component{
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.rows.map((row) => (
+                            {this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row) => (
                                 <TableRow key={row.id}>
                                     <TableCell>{row.file_name}</TableCell>
                                     <TableCell>{dateToStr(row.datetime)}</TableCell>
@@ -100,7 +117,16 @@ export default class VideoTable extends Component{
                             See more videos
                         </Link>
                     </div>
-                </React.Fragment>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={this.state.rows.length}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangePerPage}
+                />
             </div>
         )
     }
