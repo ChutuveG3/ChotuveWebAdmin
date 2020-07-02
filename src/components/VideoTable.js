@@ -6,7 +6,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import {bytesToStr, dateToStr} from "../utilities/StrUtilities";
+import {bytesToStr, dateNowToStr, dateToStr} from "../utilities/StrUtils";
 import classes from "react-bootstrap/cjs/Popover";
 import LinkIcon from '@material-ui/icons/Link';
 import PublishIcon from '@material-ui/icons/Publish'
@@ -88,25 +88,24 @@ export default class VideoTable extends Component{
 
     handleSubmit = e => {
         e.preventDefault()
-        console.log("Sabe")
         const headers = {headers: {authorization: localStorage.getItem("token")}};
         return mediaApi.post('/videos',
             {
                 download_url: this.state.videoURL,
-                datetime: Date.now().toString(),
+                datetime: dateNowToStr(),
                 file_name: this.state.fileName,
                 file_size: this.state.fileSize
             }, headers)
             .then(res => {
-                if (res.status === 200) {
-                    console.log("Que grande")
+                if (res.status === 201) {
+                    console.log("Upload video success")
                     this.setState({open: false})
                     Swal.fire({
                         icon: 'success',
                         title: 'The video has been uploaded',
                         showConfirmButton: false,
                         timer: 1500
-                    })
+                    }).then(() => Promise.resolve())
                 }
             })
             .catch(err => {

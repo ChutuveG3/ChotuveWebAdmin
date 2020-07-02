@@ -13,3 +13,15 @@ export function dateToStr(strDate) {
 
     return `${da} ${mo}, ${ye}`
 }
+
+export function dateNowToStr() {
+    const date = Date.now()
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date)
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date)
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date)
+    const hr = new Intl.DateTimeFormat('default', { hour: '2-digit' }).format(date)
+    const mi = new Intl.DateTimeFormat('en', { minute: '2-digit' }).format(date)
+    const se = new Intl.DateTimeFormat('en', { second: '2-digit' }).format(date)
+
+    return `${ye}-${mo}-${da}T${hr}:${mi}:${se}`
+}
