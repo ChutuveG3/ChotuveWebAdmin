@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import HomeNavBar from "../components/HomeNavBar";
 import UsersInfo from "../components/UsersInfo";
 import {DrawerMenuList} from "../components/DrawerMenuList";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -9,6 +8,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Divider from "@material-ui/core/Divider";
 import {ServersInfo} from "../components/ServersInfo";
 import Layout from "../components/Layout";
+import LoggedNavBar from "../components/LoggedNavBar";
 
 
 class Home extends Component{
@@ -25,7 +25,7 @@ class Home extends Component{
         }
         this.setState({ open: open });
     };
-    changeComponent = (component) => (event) => {
+    changeComponent = (component) => () => {
         this.setState({ component: component})
     }
     render(){
@@ -48,7 +48,7 @@ class Home extends Component{
         }
         return(
             <div>
-                <HomeNavBar menuAction={this.toggleDrawer}/>
+                <LoggedNavBar menuAction={this.toggleDrawer}/>
                 <div>
                     {view}
                 </div>
@@ -59,7 +59,7 @@ class Home extends Component{
                     onClose={this.toggleDrawer(false)}
                     onOpen={this.toggleDrawer(true)}
                 >
-                    <div style={{height: "50px", display : "flex", justifyContent: "flex-end"}}>
+                    <div style={{display : "flex", justifyContent: "flex-end"}}>
                         <IconButton onClick={this.toggleDrawer(false)}>
                             <ChevronLeftIcon/>
                         </IconButton>

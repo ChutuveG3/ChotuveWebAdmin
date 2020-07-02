@@ -57,13 +57,13 @@ html, .App, #root, .auth-wrapper {
 }
 
 .users-count{
-  width: 190px;
-  height: 190px;
-  margin: 70px 5% 10px auto;
+  width: 130px;
+  height: 130px;
+  margin: 10px 5% 10px auto;
   alignment: right;
   background: #ffffff;
   box-shadow: 0 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
+  padding: 10px 10px 10px 10px;
   border-radius: 150px;
   transition: all .3s;
 }

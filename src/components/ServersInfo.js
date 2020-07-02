@@ -6,7 +6,10 @@ export class ServersInfo extends Component{
         super(props);
         this.state = {
             successfulPost: false,
-            serverName: ''
+            serverName: '',
+            error: {
+                serverName: ''
+            }
         }
     }
     postServer = e => {
@@ -18,6 +21,10 @@ export class ServersInfo extends Component{
                 this.setState({apiKey: res.data.api_key, successfulPost: true})
             })
             .catch(err => {
+                if (err.response.data.internal_code === "server_already_registered"){
+                    this.setState({error:{serverName : 'A server with that name already exists'}})
+                    return
+                }
                 console.log(err.response.data)
             })
     }
@@ -29,9 +36,9 @@ export class ServersInfo extends Component{
         })
     };
     render() {
-        const serverName = this.state.serverName
-        const posted = this.state.successfulPost
-        if (posted) return (<div>
+        const {successfulPost, serverName, error} = this.state
+
+        if (successfulPost) return (<div>
             <h3>This is your Api Key</h3>
             <h5 style={{wordBreak: 'break-all' , marginTop: "50px", marginBottom: "50px", color: '#167bff'}}>{this.state.apiKey}</h5>
             <p>You need to set it as an env variable for your app server</p>
@@ -43,13 +50,16 @@ export class ServersInfo extends Component{
                     <label>Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={error.serverName.length > 0 ? "is-invalid form-control" : "form-control"}
                         placeholder="Server name"
                         name='serverName'
                         value={serverName}
                         onChange={this.formValChange}
                         required
                     />
+                    {error.serverName.length > 0 && (
+                        <span className="invalid-feedback">{error.serverName}</span>
+                    )}
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">Register</button>
             </form>
