@@ -57,7 +57,7 @@ export default class VideoTable extends Component{
             console.log(`delete video ${video_id} on app server`);
             appApi.delete(url, headers)
                 .then(res => {
-                    if (res.status === 200) {
+                    if ((res.status === 200) || (res.status === 409)) {
                         console.log(`delete video ${video_id} on media server`);
                         mediaApi.delete(url, headers)
                             .then( () => {
