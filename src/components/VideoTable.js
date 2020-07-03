@@ -69,7 +69,7 @@ export default class VideoTable extends Component{
                             })
                         }).catch(err => console.log(err));
                 }).catch(err => {
-                if ((err.status === 409)) {
+                if ((err.response.status === 409)) {
                     console.log(`delete video ${video_id} on media server`);
                     mediaApi.delete(url, headers)
                         .then(() => {
