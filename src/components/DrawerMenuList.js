@@ -7,6 +7,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from "@material-ui/icons/People";
 import QueuePlayNextIcon from '@material-ui/icons/QueuePlayNext';
 import React, {Component} from "react";
+import {Link} from "react-router-dom";
 
 export class DrawerMenuList extends Component {
     render() {
@@ -18,19 +19,19 @@ export class DrawerMenuList extends Component {
                 onKeyDown={this.props.toggleDrawer(false)}
             >
                 <List>
-                    <ListItem button onClick={this.props.navigate('home')} key={"Home"}>
+                    <ListItem button component={Link} to={'/home/users'} key={"Home"}>
                         <ListItemIcon>{<HomeIcon/>}</ListItemIcon>
                         <ListItemText primary={"Home"}/>
                     </ListItem>
-                    <ListItem button onClick={this.props.navigate('users')} key={"Users"}>
+                    <ListItem button component={Link} to={'/home/users'} key={"Users"}>
                         <ListItemIcon>{<PeopleIcon/>}</ListItemIcon>
                         <ListItemText primary={"Users"}/>
                     </ListItem>
-                    <ListItem button onClick={this.props.navigate('videos')} key={"Videos"}>
+                    <ListItem button component={Link} to={'/home/videos'} key={"Videos"}>
                         <ListItemIcon>{<VideoLibraryIcon/>}</ListItemIcon>
                         <ListItemText primary={"Videos"}/>
                     </ListItem>
-                    <ListItem button onClick={this.props.navigate('servers')} key={"LogOut"}>
+                    <ListItem button component={Link} to={'/home/servers'} key={"LogOut"}>
                         <ListItemIcon>{<QueuePlayNextIcon/>}</ListItemIcon>
                         <ListItemText primary={"Servers"}/>
                     </ListItem>
