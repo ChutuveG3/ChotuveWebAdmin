@@ -57,20 +57,33 @@ export default class VideoTable extends Component{
             console.log(`delete video ${video_id} on app server`);
             appApi.delete(url, headers)
                 .then(res => {
-                    if ((res.status === 200) || (res.status === 409)) {
-                        console.log(`delete video ${video_id} on media server`);
-                        mediaApi.delete(url, headers)
-                            .then( () => {
-                                console.log('delete success')
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'The video has been deleted',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            }).catch(err => console.log(err));
-                    }
-                }).catch(err => console.log(err));
+                    console.log(`delete video ${video_id} on media server`);
+                    mediaApi.delete(url, headers)
+                        .then( () => {
+                            console.log('delete success')
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'The video has been deleted',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }).catch(err => console.log(err));
+                }).catch(err => {
+                if ((err.status === 409)) {
+                    console.log(`delete video ${video_id} on media server`);
+                    mediaApi.delete(url, headers)
+                        .then(() => {
+                            console.log('delete success')
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'The video has been deleted',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }).catch(err => console.log(err));
+                }
+                else console.log(err)
+                });
         })
     }
 
