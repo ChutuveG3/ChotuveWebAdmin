@@ -7,13 +7,6 @@ describe('date', () => {
 
         expect(dateTimeToString(date)).toBe(expectDateSrt);
     });
-
-    test('date to string format success', () => {
-        const expectDateSrt = '21 Mar, 2020'
-        const strDate = '2020-03-21T14:03:04'
-
-        expect(dateToStr(strDate)).toBe(expectDateSrt);
-    });
 });
 
 describe('file size', () => {
