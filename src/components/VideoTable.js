@@ -6,7 +6,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+<<<<<<< HEAD
 import {bytesToStr, dateTimeToString, dateToStr} from "../utilities/StrUtils";
+=======
+import {bytesToStr, dateToStr} from "../utilities/StrUtils";
+>>>>>>> origin/refactor_routes
 import classes from "react-bootstrap/cjs/Popover";
 import LinkIcon from '@material-ui/icons/Link';
 import PublishIcon from '@material-ui/icons/Publish'
@@ -69,7 +73,7 @@ export default class VideoTable extends Component{
                             })
                         }).catch(err => console.log(err));
                 }).catch(err => {
-                if ((err.status === 409)) {
+                if ((err.response.status === 409)) {
                     console.log(`delete video ${video_id} on media server`);
                     mediaApi.delete(url, headers)
                         .then(() => {
@@ -105,7 +109,6 @@ export default class VideoTable extends Component{
         return mediaApi.post('/videos',
             {
                 download_url: this.state.videoURL,
-                datetime: dateTimeToString(Date.now()),
                 file_name: this.state.fileName,
                 file_size: this.state.fileSize
             }, headers)
