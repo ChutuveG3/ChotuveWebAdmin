@@ -92,7 +92,7 @@ export default class VideoTable extends Component{
         return mediaApi.post('/videos',
             {
                 download_url: this.state.videoURL,
-                datetime: dateTimeToString(),
+                datetime: dateTimeToString(Date.now()),
                 file_name: this.state.fileName,
                 file_size: this.state.fileSize
             }, headers)
