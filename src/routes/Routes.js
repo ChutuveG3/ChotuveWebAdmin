@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './../App.css';
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import Login from "../controllers/Login";
-import Signup from "../controllers/Signup";
 import {PrivateRoute} from "./PrivateRoute";
 import UsersInfo from "../components/UsersInfo";
 import VideoInfo from "../components/VideoInfo";
@@ -61,7 +60,6 @@ class Routes extends Component {
                         <Login {...props}/>}
                   />
                   <Route exact path="/sign-in" component={Login} />
-                  <Route exact path="/sign-up" component={Signup} />
               </div>
           </Router>
       );
