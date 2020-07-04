@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import axios from 'axios';
-import {getSetting} from "../settings";
 import {withRouter} from 'react-router-dom'
+import {authApi} from "../api/axios";
 
 const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond, Error}) => {
 
@@ -14,16 +13,11 @@ const validateData = ({firstName, lastName, email, passwordFirst, passwordSecond
         return false
     }
     const options = {headers: {crossOrigin : true, withCredentials: false}}
-
-    const url = getSetting('AUTH_BASE_URL') + '/admins'
-    console.log('Sing up url:' + url)
-
-    return axios.post(url,{first_name: firstName,
+    return authApi.post('/admins',{first_name: firstName,
                                 last_name: lastName,
                                 email: email,
                                 password: passwordFirst}, options)
         .then(res => {
-            console.log(res)
             localStorage.setItem('token', res.data.token)
             return true
         })
@@ -59,15 +53,15 @@ class SignupForm extends Component {
         e.persist()
         const valid = await validateData({...this.state})
         if (valid === true) {
-            console.log('Success')
+            console.log('Success login')
             this.props.history.push('/sign-in')
         }
         else{
+            console.log('Fail login')
             this.setState({
-            [e.target.Error]: e.target.value,
-        })
+                [e.target.Error]: e.target.value,
+            })
         }
-
     };
 
     formValChange = e => {
