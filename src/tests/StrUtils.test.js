@@ -1,11 +1,10 @@
-import {bytesToStr, dateTimeToString, dateToStr} from "../utilities/StrUtils";
+import {bytesToStr, dateToStr} from "../utilities/StrUtils";
 
 describe('date', () => {
     test('datetime to string format success', () => {
-        const expectDateSrt = '2020-03-21T14:03:04';
-        const date = Date.parse(expectDateSrt);
+        const strDate = "2020-03-21T14:03:04"
 
-        expect(dateTimeToString(date)).toBe(expectDateSrt);
+        expect(dateToStr(strDate)).toBe('21 Mar, 2020')
     });
 });
 

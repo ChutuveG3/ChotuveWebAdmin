@@ -20,10 +20,14 @@ export default class UsersInfo extends Component {
 
     render() {
         const loading = this.state.isLoading
-        if (loading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
-        else return (<div>
-            <CountDisplay count = {this.state.rows.length} resource = {'users'}/>
-            <UsersTable rows = {this.state.rows}/>
-        </div>)
+        if (loading) return (
+            <div className="loading-screen"><h3>Loading...</h3></div>
+        )
+        else return (
+            <div>
+                <CountDisplay count = {this.state.rows.length} resource = {'users'}/>
+                <UsersTable rows = {this.state.rows}/>
+            </div>
+        )
     }
 }

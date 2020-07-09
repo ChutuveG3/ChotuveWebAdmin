@@ -7,7 +7,7 @@ import Signup from "../controllers/Signup";
 import {PrivateRoute} from "./PrivateRoute";
 import UsersInfo from "../components/UsersInfo";
 import VideoInfo from "../components/VideoInfo";
-import {ServersInfo} from "../components/ServersInfo";
+import {ServersRegister} from "../components/ServersRegister";
 import Layout from "../components/Layout";
 import LoggedNavBar from "../components/LoggedNavBar";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -15,6 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Divider from "@material-ui/core/Divider";
 import {DrawerMenuList} from "../components/DrawerMenuList";
+import ServersInfo from "../components/ServersInfo";
 
 class Routes extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class Routes extends Component {
                       <div>
                           <PrivateRoute url='/users/' view={<UsersInfo/>} />
                           <PrivateRoute url='/videos/' view={<VideoInfo/>} />
-                          <PrivateRoute url='/servers/' view={<Layout component = {<ServersInfo/>}/>} />
+                          <PrivateRoute url='/servers/' view={<ServersInfo/>}/>
                       </div>
                       <SwipeableDrawer
                           className="drawer"
