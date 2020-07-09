@@ -33,12 +33,12 @@ class Routes extends Component {
       return (
           <Router >
               <div className="App">
-                  <Route exact path={['/home/users', '/home/videos', '/home/servers']}>
+                  <Route exact path={['/users', '/videos', '/servers']}>
                       <LoggedNavBar menuAction={this.toggleDrawer}/>
                       <div>
-                          <PrivateRoute url='/home/users/' view={<UsersInfo/>} />
-                          <PrivateRoute url='/home/videos/' view={<VideoInfo/>} />
-                          <PrivateRoute url='/home/servers/' view={<Layout component = {<ServersInfo/>}/>} />
+                          <PrivateRoute url='/users/' view={<UsersInfo/>} />
+                          <PrivateRoute url='/videos/' view={<VideoInfo/>} />
+                          <PrivateRoute url='/servers/' view={<Layout component = {<ServersInfo/>}/>} />
                       </div>
                       <SwipeableDrawer
                           className="drawer"
@@ -57,7 +57,7 @@ class Routes extends Component {
                       </SwipeableDrawer>
                   </Route>
                   <Route exact path='/' render = { props => localStorage.getItem('token') ?
-                        <Redirect to={{pathname: "/home/users"}}/> :
+                        <Redirect to={{pathname: "/users"}}/> :
                         <Login {...props}/>}
                   />
                   <Route exact path="/sign-in" component={Login} />
