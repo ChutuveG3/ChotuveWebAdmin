@@ -39,7 +39,7 @@ export default class VideoTable extends Component{
         }
     }
 
-    async deleteVideo(video_id) {
+    deleteVideo = (video_id) => {
         const headers = {headers: {authorization: localStorage.getItem("token")}};
         const url = `/videos/${video_id}`;
         console.log(`delete video ${video_id}`);

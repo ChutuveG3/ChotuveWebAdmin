@@ -7,8 +7,6 @@ import Signup from "../controllers/Signup";
 import {PrivateRoute} from "./PrivateRoute";
 import UsersInfo from "../components/UsersInfo";
 import VideoInfo from "../components/VideoInfo";
-import {ServersRegister} from "../components/ServersRegister";
-import Layout from "../components/Layout";
 import LoggedNavBar from "../components/LoggedNavBar";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";

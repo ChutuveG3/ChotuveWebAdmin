@@ -1,8 +1,8 @@
 import React,{Component} from "react";
-import {mediaApi} from "../api/axios";
+import {authApi} from "../api/axios";
 import axios from "axios";
 import ServersTable from "./ServersTable";
-import {ServersRegister} from "./ServersRegister";
+import CountDisplay from "./CountDisplay";
 
 export default class ServersInfo extends Component {
     constructor(props) {
@@ -12,10 +12,10 @@ export default class ServersInfo extends Component {
 
     componentDidMount() {
         const headers = { headers: { authorization: localStorage.getItem("token")}}
-        // authApi.get("/servers", headers)
-        axios.get("https://run.mocky.io/v3/1142676f-35ff-4db7-9178-73a541b663ee/servers", headers)
+        //authApi.get("/servers", headers)
+        axios.get("https://run.mocky.io/v3/f8724788-1c6f-4a61-abd5-a0825b5fd6b3/servers", headers)
             .then(res => {
-                this.setState({rows: res.data, isLoading: false})
+                this.setState({rows: res.data.servers, isLoading: false})
             }).catch(err => console.log(err))
     }
 
@@ -24,7 +24,7 @@ export default class ServersInfo extends Component {
         if (loading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
         else return (
             <div>
-                <ServersRegister/>
+                <CountDisplay resource={'Servers'} count={this.state.rows.length}/>
                 <ServersTable rows={this.state.rows}/>
             </div>
         )
