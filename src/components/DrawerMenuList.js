@@ -19,19 +19,19 @@ export class DrawerMenuList extends Component {
                 onKeyDown={this.props.toggleDrawer(false)}
             >
                 <List>
-                    <ListItem button component={Link} to={'/home/users'} key={"Home"}>
+                    <ListItem button component={Link} to={'/users'} key={"Home"}>
                         <ListItemIcon>{<HomeIcon/>}</ListItemIcon>
                         <ListItemText primary={"Home"}/>
                     </ListItem>
-                    <ListItem button component={Link} to={'/home/users'} key={"Users"}>
+                    <ListItem button component={Link} to={'/users'} key={"Users"}>
                         <ListItemIcon>{<PeopleIcon/>}</ListItemIcon>
                         <ListItemText primary={"Users"}/>
                     </ListItem>
-                    <ListItem button component={Link} to={'/home/videos'} key={"Videos"}>
+                    <ListItem button component={Link} to={'/videos'} key={"Videos"}>
                         <ListItemIcon>{<VideoLibraryIcon/>}</ListItemIcon>
                         <ListItemText primary={"Videos"}/>
                     </ListItem>
-                    <ListItem button component={Link} to={'/home/servers'} key={"LogOut"}>
+                    <ListItem button component={Link} to={'/servers'} key={"LogOut"}>
                         <ListItemIcon>{<QueuePlayNextIcon/>}</ListItemIcon>
                         <ListItemText primary={"Servers"}/>
                     </ListItem>
