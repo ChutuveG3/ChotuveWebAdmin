@@ -126,7 +126,7 @@ export default class ServersTable extends Component {
                                 .map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell>{row.name}</TableCell>
-                                        <TableCell>{dateToStr(row.datetime)}</TableCell>
+                                        <TableCell>{dateToStr(row.created_at)}</TableCell>
                                         <TableCell >
                                             <IconButton aria-label="delete" className={classes.margin} onClick={() =>
                                                 showInfo(`${row.name} Api Key`, `${row.api_key}`)}>
