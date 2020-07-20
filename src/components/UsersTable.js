@@ -21,7 +21,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
-import {KeyboardDatePicker} from '@material-ui/pickers';
 
 export default class UsersTable extends Component{
     constructor(props) {
