@@ -11,8 +11,17 @@ import IconButton from "@material-ui/core/IconButton";
 import classes from "react-bootstrap/cjs/Popover";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Swal from "sweetalert2";
-import {appApi, authApi} from "../api/axios";
+import {appApi, authApi, mediaApi} from "../api/axios";
 import {showSuccess} from "../utilities/Alerts";
+import Toolbar from "@material-ui/core/Toolbar";
+import {Button} from "@material-ui/core";
+import PublishIcon from "@material-ui/icons/Publish";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions";
+import {KeyboardDatePicker} from '@material-ui/pickers';
 
 export default class UsersTable extends Component{
     constructor(props) {
@@ -20,7 +29,14 @@ export default class UsersTable extends Component{
         this.state = {
             rows: this.props.rows,
             page: 0,
-            rowsPerPage: 5
+            rowsPerPage: 5,
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            birthday: '',
+            username: '',
+            confirmPassword: ''
         }
     }
 
@@ -30,6 +46,10 @@ export default class UsersTable extends Component{
 
     handleChangePerPage = (event) => {
         this.setState({rowsPerPage: parseInt(event.target.value, 10)});
+    }
+
+    handleClick = (open) => () => {
+        this.setState({open: open})
     }
 
     deleteUser = (username) => {
@@ -66,15 +86,166 @@ export default class UsersTable extends Component{
             });
         }
 
+    formValChange = e => {
+        e.preventDefault();
+
+        this.setState({
+            [e.target.name]: e.target.value,
+        })
+    };
+
+
+    handleSubmit = e => {
+        e.preventDefault()
+        const options = {
+            headers: {
+                authorization: localStorage.getItem("token")
+            }
+        }
+        const userData = {
+            first_name: this.state.firstName,
+            last_name: this.state.lastName,
+            email: this.state.email,
+            password: this.state.password,
+            user_name: this.state.username,
+            birthdate: this.state.birthday
+        }
+
+        console.log("Create user")
+        return appApi.post('/users', userData, options)
+            .then(() => {
+                console.log("User created success")
+                this.setState({open: false})
+                showSuccess('The User has been created')
+            })
+            .catch(err => {
+                console.log(err.response.data)
+            })
+    }
+
     render() {
+        const firstName = this.state.firstName
+        const lastName = this.state.lastName
+        const password = this.state.password
+        const confirmPassword = this.state.confirmPassword
+        const birthday = this.state.birthday
+        const email = this.state.email
+        const username = this.state.username
         const page = this.state.page
         const rowsPerPage = this.state.rowsPerPage
+
         return (
             <div className="format-table">
                 <TableContainer style={{maxHeight: "300px"}}>
-                    <Typography component="h1" variant="h6" color="primary" gutterBottom>
-                        Users
-                    </Typography>
+                    <Toolbar>
+                        <Typography variant="h6" color="primary">
+                            Users
+                        </Typography>
+                        <div style={{marginLeft: "auto"}}>
+                            <Button
+                                onClick={this.handleClick(true)}
+                                variant="contained"
+                                color="primary"
+                                startIcon={<PublishIcon/>}
+                            >
+                                Add User
+                            </Button>
+                            <Dialog fullWidth open={this.state.open} onClose={this.handleClick(false)}>
+                                <DialogTitle>
+                                    <h3>Add User</h3>
+                                </DialogTitle>
+                                <DialogContent>
+                                    <form id="addUserForm" onSubmit={this.handleSubmit}>
+                                        <label>First Name</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="First name"
+                                            name="firstName"
+                                            value={firstName}
+                                            onChange={this.formValChange}
+                                            type="text"
+                                            required
+                                        /><br/>
+                                        <label>Last Name</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Last name"
+                                            name="lastName"
+                                            value={lastName}
+                                            onChange={this.formValChange}
+                                            type="text"
+                                            required
+                                        /><br/>
+                                        <label>Email</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Email"
+                                            name="email"
+                                            value={email}
+                                            onChange={this.formValChange}
+                                            type="email"
+                                            required
+                                        /><br/>
+                                        <label>Password</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Password"
+                                            name="password"
+                                            value={password}
+                                            onChange={this.formValChange}
+                                            type="password"
+                                            required
+                                        /><br/>
+                                        <label>Confirm password</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Confirm password"
+                                            name="confirmPassword"
+                                            value={confirmPassword}
+                                            onChange={this.formValChange}
+                                            type="password"
+                                            required
+                                        /><br/>
+                                        <label>Username</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            margin="dense"
+                                            placeholder="Username"
+                                            name="username"
+                                            value={username}
+                                            onChange={this.formValChange}
+                                            type="text"
+                                            required
+                                        /><br/>
+                                        <label>Birthday</label><br/>
+                                        <TextField
+                                            fullWidth
+                                            placeholder="Birthday"
+                                            name="birthday"
+                                            value={birthday}
+                                            onChange={this.formValChange}
+                                            id="date"
+                                            type="date"
+                                            className={classes.textField}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            required
+                                        />
+                                    </form>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={this.handleClick(false)} color="primary">Cancel</Button>
+                                    <Button type="submit" form="addUserForm" color="primary">Submit</Button>
+                                </DialogActions>
+                            </Dialog>
+                        </div>
+                    </Toolbar>
                     <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
