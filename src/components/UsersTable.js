@@ -7,6 +7,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
+import IconButton from "@material-ui/core/IconButton";
+import classes from "react-bootstrap/cjs/Popover";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import Swal from "sweetalert2";
+import {appApi, authApi} from "../api/axios";
+import {showSuccess} from "../utilities/Alerts";
 
 export default class UsersTable extends Component{
     constructor(props) {
@@ -25,6 +31,41 @@ export default class UsersTable extends Component{
     handleChangePerPage = (event) => {
         this.setState({rowsPerPage: parseInt(event.target.value, 10)});
     }
+
+    deleteUser = (username) => {
+        const options = {
+            headers: {
+                authorization: localStorage.getItem("token")
+            }
+        };
+
+        const url = `/users/${username}`;
+        console.log(`delete user: ${username}`);
+
+        Swal.fire({
+            title: `Are you sure you want to delete ${username}?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d63030',
+            cancelButtonColor: '#7b7b7b',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (!result.value) return;
+
+            console.log(`delete user ${username} on app server`);
+            appApi.delete(url, options)
+                .then(() => {
+                    console.log(`delete user ${username} on auth server`);
+                    authApi.delete(url, options)
+                        .then( () => {
+                            console.log('User delete success')
+                            showSuccess('The user has been deleted')
+                        }).catch(err => console.log(err));
+                }).catch(err => console.log(err))
+            });
+        }
+
     render() {
         const page = this.state.page
         const rowsPerPage = this.state.rowsPerPage
@@ -41,7 +82,8 @@ export default class UsersTable extends Component{
                                 <TableCell>Last Name</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>Date of Birth</TableCell>
-                                <TableCell align="right">Username</TableCell>
+                                <TableCell>Username</TableCell>
+                                <TableCell>Delete</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -52,7 +94,12 @@ export default class UsersTable extends Component{
                                     <TableCell>{row.last_name}</TableCell>
                                     <TableCell>{row.email}</TableCell>
                                     <TableCell>{row.birthdate}</TableCell>
-                                    <TableCell align="right">{row.user_name}</TableCell>
+                                    <TableCell>{row.user_name}</TableCell>
+                                    <TableCell>
+                                        <IconButton aria-label="delete" className={classes.margin} onClick={() => this.deleteUser(row.user_name)}>
+                                            <DeleteOutlineIcon style={{color: 'rgba(191,36,36,0.97)'}}/>
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
