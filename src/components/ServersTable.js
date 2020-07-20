@@ -6,9 +6,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import TableContainer from "@material-ui/core/TableContainer";
-import {authApi, mediaApi} from "../api/axios";
+import {appApi, authApi, mediaApi} from "../api/axios";
 import {dateToStr} from "../utilities/StrUtils";
-import {showInfo, showSuccess} from "../utilities/Alerts";
+import {showError, showInfo, showSuccess} from "../utilities/Alerts";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Swal from "sweetalert2";
 import IconButton from "@material-ui/core/IconButton";
@@ -44,6 +44,35 @@ export default class ServersTable extends Component {
             [e.target.name]: e.target.value,
         })
     };
+
+    deleteServer = (serverName) => {
+        const options = {
+            headers: {crossOrigin : true,
+                withCredentials: false,
+                authorization: localStorage.getItem('token')
+            }
+        }
+        console.log(`delete ${serverName}`);
+
+        Swal.fire({
+            title: `Are you sure you want to delete ${serverName}?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d63030',
+            cancelButtonColor: '#7b7b7b',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (!result.value) return;
+
+            authApi.delete(`/servers/${serverName}`, options)
+                .then(() => (
+                    showSuccess(`Delete ${serverName} success`)
+                )).catch(() => (
+                    showError(`Fail to delete ${serverName}`, 'Please, try again!')
+                ));
+        })
+    }
 
     handleSubmit = e => {
         e.preventDefault()
@@ -119,6 +148,7 @@ export default class ServersTable extends Component {
                                 <TableCell>Name</TableCell>
                                 <TableCell>Registration Date</TableCell>
                                 <TableCell>Api Key</TableCell>
+                                <TableCell>Delete</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -131,6 +161,11 @@ export default class ServersTable extends Component {
                                             <IconButton aria-label="delete" className={classes.margin} onClick={() =>
                                                 showInfo(`${row.name} Api Key`, `${row.api_key}`)}>
                                                 <VisibilityOffIcon style={{color: 'rgba(108,36,191,0.97)'}}/>
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <IconButton aria-label="delete" className={classes.margin} onClick={() => this.deleteServer(row.name)}>
+                                                <DeleteOutlineIcon style={{color: 'rgba(191,36,36,0.97)'}}/>
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
