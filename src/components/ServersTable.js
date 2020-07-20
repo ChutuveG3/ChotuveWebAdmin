@@ -6,7 +6,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import TableContainer from "@material-ui/core/TableContainer";
-import {appApi, authApi, mediaApi} from "../api/axios";
+import {authApi} from "../api/axios";
 import {dateToStr} from "../utilities/StrUtils";
 import {showError, showInfo, showSuccess} from "../utilities/Alerts";
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -23,13 +23,18 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Toolbar from "@material-ui/core/Toolbar";
 
+const SERVER_NAME_FORMAT = RegExp(
+    /^[a-zA-Z0-9._-]{4,40}$/gs
+)
+
 export default class ServersTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rows: this.props.rows,
             showRegisterForm: false,
-            serverName: ''
+            serverName: '',
+            serverNameError: ''
         }
     }
 
@@ -42,8 +47,25 @@ export default class ServersTable extends Component {
 
         this.setState({
             [e.target.name]: e.target.value,
+            serverNameError: ''
         })
     };
+
+    handleValidation() {
+        const serverName = this.state.serverName;
+
+        if (serverName && !SERVER_NAME_FORMAT.test(serverName)) {
+            this.setState({
+                serverNameError: 'Server name should contains 4 to 30 ' +
+                    'characters (letters and symbols) without space. ' +
+                    'Example: chotuve_app_server'});
+
+            return false
+        }
+        this.setState({serverNameError: ''});
+
+        return true
+    }
 
     deleteServer = (serverName) => {
         const options = {
@@ -76,8 +98,16 @@ export default class ServersTable extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
-        const options = {headers: {crossOrigin : true, withCredentials: false, authorization: localStorage.getItem('token')}}
 
+        if (!this.handleValidation()) return
+
+        const options = {
+            headers: {
+                crossOrigin: true,
+                withCredentials: false,
+                authorization: localStorage.getItem('token')
+            }
+        }
         return authApi.post('/servers', {server: this.state.serverName}, options)
             .then(res => {
                 this.setState({showRegisterForm: false})
@@ -92,8 +122,8 @@ export default class ServersTable extends Component {
                 }).then(() => Promise.resolve())
             })
             .catch(err => {
-                if (err.response.data.internal_code === "server_already_registered"){
-                    this.setState({error:{serverName : 'A server with that name already exists'}})
+                if (err.response.data.internal_code === "server_already_registered") {
+                    this.setState({error: {serverName: 'A server with that name already exists'}})
                     return
                 }
                 console.log(err.response.data)
@@ -126,6 +156,9 @@ export default class ServersTable extends Component {
                                         <label>Server name</label><br/>
                                         <TextField
                                             fullWidth
+                                            error={!!this.state.serverNameError}
+                                            label={this.state.serverNameError? 'Error' : ''}
+                                            helperText={this.state.serverNameError? this.state.serverNameError : ''}
                                             margin="dense"
                                             placeholder="Server name"
                                             name="serverName"
@@ -133,6 +166,7 @@ export default class ServersTable extends Component {
                                             type="text"
                                             required
                                         /><br/>
+                                        <span className="invalid-feedback">{this.state.serverNameError}</span>
                                     </form>
                                 </DialogContent>
                                 <DialogActions>
