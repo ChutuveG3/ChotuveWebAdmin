@@ -11,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import classes from "react-bootstrap/cjs/Popover";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Swal from "sweetalert2";
-import {appApi, authApi, mediaApi} from "../api/axios";
+import {appApi, authApi} from "../api/axios";
 import {showSuccess} from "../utilities/Alerts";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button} from "@material-ui/core";

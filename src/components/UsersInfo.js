@@ -14,7 +14,7 @@ export default class UsersInfo extends Component {
         const headers = { headers: { authorization: localStorage.getItem("token")}}
         await authApi.get("/users", headers)
             .then(res => {
-                this.setState({rows: res.data, isLoading: false})
+                this.setState({rows: res.data.users, isLoading: false})
             }).catch(err => console.log(err))
     }
 
