@@ -11,13 +11,13 @@ export function showSuccess(title, message = '') {
     })  )
 }
 
-export function showFail(title) {
+export function showError(title, message = '') {
     return (
         Swal.fire({
-            icon: 'success',
+            icon: 'error',
             title: title,
-            showConfirmButton: false,
-            timer: 1500
+            text: message,
+            showConfirmButton: false
         })
     )
 }
