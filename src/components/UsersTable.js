@@ -12,7 +12,7 @@ import classes from "react-bootstrap/cjs/Popover";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Swal from "sweetalert2";
 import {appApi, authApi} from "../api/axios";
-import {showSuccess} from "../utilities/Alerts";
+import {showFail, showSuccess} from "../utilities/Alerts";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button} from "@material-ui/core";
 import PublishIcon from "@material-ui/icons/Publish";
@@ -21,6 +21,18 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
+
+const USERNAME_FORMAT = RegExp(
+    /^[a-zA-Z0-9_-]{4,30}$/gs
+)
+const BIRTHDAY_FORMAT = RegExp(
+    /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/gs
+)
+const EMAIL_FORMAT = RegExp(
+    /\S+@\S+\.\S+/
+)
+const MIN_PASS_LENGTH = 6
+const MAX_NAME_LENGTH = 50
 
 export default class UsersTable extends Component{
     constructor(props) {
@@ -32,11 +44,58 @@ export default class UsersTable extends Component{
             firstName: '',
             lastName: '',
             email: '',
-            password: '',
             birthday: '',
             username: '',
-            confirmPassword: ''
+            password: '',
+            confirmPassword: '',
+            errors: {}
         }
+    }
+
+    validateData() {
+        let valid = true;
+        const firstName = this.state.firstName;
+        const lastName = this.state.lastName;
+        const email = this.state.email;
+        const pass = this.state.password;
+        const confirmPass = this.state.confirmPassword;
+        const birthday = this.state.birthday;
+        const username = this.state.username;
+        let errors = {}
+
+        if (firstName.length > MAX_NAME_LENGTH) {
+            errors['firstName'] = 'Invalid first name';
+            valid = false;
+        }
+        if (lastName.length > MAX_NAME_LENGTH) {
+            errors['lastName'] = 'Invalid last name';
+            valid = false;
+        }
+        if (!(username && USERNAME_FORMAT.test(username))) {
+            errors['username'] = 'Invalid username';
+            valid = false;
+        }
+        if (!(birthday && BIRTHDAY_FORMAT.test(birthday)) && (Date.parse(birthday) > Date.now())) {
+            errors['birthday'] = 'Invalid birthdate';
+            valid = false;
+        }
+        if (!(email && EMAIL_FORMAT.test(email))) {
+            errors['email'] = 'Invalid email';
+            valid = false;
+        }
+        if (pass) {
+            if (pass.length < MIN_PASS_LENGTH) {
+                errors['password'] = 'Password must be at least 6 characters';
+                valid = false;
+            }
+            if (pass !== confirmPass) {
+                errors['password'] = 'Passwords must match';
+                valid = false;
+            }
+        }
+        this.setState({errors: errors});
+
+        return valid
     }
 
     handleChangePage = (event, newPage) =>{
@@ -96,6 +155,9 @@ export default class UsersTable extends Component{
 
     handleSubmit = e => {
         e.preventDefault()
+
+        if (!this.validateData()) return
+
         const options = {
             headers: {
                 authorization: localStorage.getItem("token")
@@ -118,7 +180,12 @@ export default class UsersTable extends Component{
                 showSuccess('The User has been created')
             })
             .catch(err => {
-                console.log(err.response.data)
+                console.log(err.response)
+                if (err.response.data.internal_code === "auth_server_error") {
+                    this.setState({open: false})
+                    showFail('A user with that username or email already exists')
+                    return
+                }
             })
     }
 
@@ -157,6 +224,9 @@ export default class UsersTable extends Component{
                                     <form id="addUserForm" onSubmit={this.handleSubmit}>
                                         <label>First Name</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.firstName}
+                                            label={this.state.errors.firstName ? 'Error' : ''}
+                                            helperText={this.state.errors.firstName ? this.state.errors.firstName : ''}
                                             fullWidth
                                             margin="dense"
                                             placeholder="First name"
@@ -168,6 +238,9 @@ export default class UsersTable extends Component{
                                         /><br/>
                                         <label>Last Name</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.lastName}
+                                            label={this.state.errors.lastName ? 'Error' : ''}
+                                            helperText={this.state.errors.lastName ? this.state.errors.lastName : ''}
                                             fullWidth
                                             margin="dense"
                                             placeholder="Last name"
@@ -179,6 +252,9 @@ export default class UsersTable extends Component{
                                         /><br/>
                                         <label>Email</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.email}
+                                            label={this.state.errors.email ? 'Error' : ''}
+                                            helperText={this.state.errors.email ? this.state.errors.email : ''}
                                             fullWidth
                                             margin="dense"
                                             placeholder="Email"
@@ -190,6 +266,9 @@ export default class UsersTable extends Component{
                                         /><br/>
                                         <label>Password</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.password}
+                                            label={this.state.errors.password ? 'Error' : ''}
+                                            helperText={this.state.errors.password ? this.state.errors.password : ''}
                                             fullWidth
                                             margin="dense"
                                             placeholder="Password"
@@ -212,6 +291,9 @@ export default class UsersTable extends Component{
                                         /><br/>
                                         <label>Username</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.username}
+                                            label={this.state.errors.username ? 'Error' : ''}
+                                            helperText={this.state.errors.username ? this.state.errors.username : ''}
                                             fullWidth
                                             margin="dense"
                                             placeholder="Username"
@@ -223,6 +305,9 @@ export default class UsersTable extends Component{
                                         /><br/>
                                         <label>Birthday</label><br/>
                                         <TextField
+                                            error={!!this.state.errors.birthday}
+                                            label={this.state.errors.birthday ? 'Error' : ''}
+                                            helperText={this.state.errors.birthday ? this.state.errors.birthday : ''}
                                             fullWidth
                                             placeholder="Birthday"
                                             name="birthday"

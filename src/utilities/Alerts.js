@@ -14,7 +14,7 @@ export function showSuccess(title, message = '') {
 export function showFail(title) {
     return (
         Swal.fire({
-            icon: 'success',
+            icon: 'warning',
             title: title,
             showConfirmButton: false,
             timer: 1500
