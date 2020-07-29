@@ -26,7 +26,7 @@ const USERNAME_FORMAT = RegExp(
     /^[a-zA-Z0-9_-]{4,30}$/gs
 )
 const BIRTHDAY_FORMAT = RegExp(
-    /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/gs
+    /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/gs
 )
 const EMAIL_FORMAT = RegExp(
     /\S+@\S+\.\S+/
@@ -71,15 +71,15 @@ export default class UsersTable extends Component{
             errors['lastName'] = 'Invalid last name';
             valid = false;
         }
-        if (!(username && USERNAME_FORMAT.test(username))) {
+        if (!username || !username.match(USERNAME_FORMAT)) {
             errors['username'] = 'Invalid username';
             valid = false;
         }
-        if (!(birthday && BIRTHDAY_FORMAT.test(birthday)) && (Date.parse(birthday) > Date.now())) {
+        if (!birthday || !birthday.match(BIRTHDAY_FORMAT) || (Date.parse(birthday) > Date.now())) {
             errors['birthday'] = 'Invalid birthdate';
             valid = false;
         }
-        if (!(email && EMAIL_FORMAT.test(email))) {
+        if (!email || !email.match(EMAIL_FORMAT)) {
             errors['email'] = 'Invalid email';
             valid = false;
         }
@@ -138,7 +138,7 @@ export default class UsersTable extends Component{
                     authApi.delete(url, options)
                         .then( () => {
                             console.log('User delete success')
-                            showSuccess('The user has been deleted')
+                            showSuccess('The user has been deleted').then()
                         }).catch(err => console.log(err));
                 }).catch(err => console.log(err))
             });
@@ -177,14 +177,13 @@ export default class UsersTable extends Component{
             .then(() => {
                 console.log("User created success")
                 this.setState({open: false})
-                showSuccess('The User has been created')
+                showSuccess('The User has been created').then()
             })
             .catch(err => {
                 console.log(err.response)
                 if (err.response.data.internal_code === "auth_server_error") {
                     this.setState({open: false})
-                    showFail('A user with that username or email already exists')
-                    return
+                    showFail('A user with that username or email already exists').then()
                 }
             })
     }

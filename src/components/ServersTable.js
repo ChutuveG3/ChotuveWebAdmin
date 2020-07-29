@@ -21,12 +21,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Toolbar from "@material-ui/core/Toolbar";
+import TablePagination from "@material-ui/core/TablePagination";
 
 export default class ServersTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rows: this.props.rows,
+            page: 0,
+            rowsPerPage: 5,
             showRegisterForm: false,
             serverName: ''
         }
@@ -34,6 +37,14 @@ export default class ServersTable extends Component {
 
     handleClick = (open) => () => {
         this.setState({showRegisterForm: open})
+    }
+
+    handleChangePage = (event, newPage) =>{
+        this.setState({page: newPage})
+    }
+
+    handleChangePerPage = (event) => {
+        this.setState({rowsPerPage: parseInt(event.target.value, 10)});
     }
 
     formValChange = e => {
@@ -71,9 +82,12 @@ export default class ServersTable extends Component {
     }
 
     render() {
+        const page = this.state.page
+        const rowsPerPage = this.state.rowsPerPage
+
         return (
             <div className="format-table">
-                <TableContainer>
+                <TableContainer style={{maxHeight: "300px"}}>
                     <Toolbar>
                         <Typography variant="h6" color="primary">
                             App Servers
@@ -121,7 +135,7 @@ export default class ServersTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.rows
+                            {this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell>{row.name}</TableCell>
@@ -137,6 +151,15 @@ export default class ServersTable extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={this.state.rows.length}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangePerPage}
+                />
             </div>
         )
     }
