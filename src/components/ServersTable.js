@@ -13,7 +13,6 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Swal from "sweetalert2";
 import IconButton from "@material-ui/core/IconButton";
 import classes from "react-bootstrap/cjs/Popover";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import {Button} from "@material-ui/core";
 import PublishIcon from "@material-ui/icons/Publish";
 import Dialog from "@material-ui/core/Dialog";
@@ -22,6 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Toolbar from "@material-ui/core/Toolbar";
+import TablePagination from "@material-ui/core/TablePagination";
 
 const SERVER_NAME_FORMAT = RegExp(
     /^[a-zA-Z0-9._-]{4,40}$/gs
@@ -32,6 +32,8 @@ export default class ServersTable extends Component {
         super(props);
         this.state = {
             rows: this.props.rows,
+            page: 0,
+            rowsPerPage: 5,
             showRegisterForm: false,
             serverName: '',
             serverNameError: ''
@@ -40,6 +42,14 @@ export default class ServersTable extends Component {
 
     handleClick = (open) => () => {
         this.setState({showRegisterForm: open})
+    }
+
+    handleChangePage = (event, newPage) =>{
+        this.setState({page: newPage})
+    }
+
+    handleChangePerPage = (event) => {
+        this.setState({rowsPerPage: parseInt(event.target.value, 10)});
     }
 
     formValChange = e => {
@@ -131,9 +141,12 @@ export default class ServersTable extends Component {
     }
 
     render() {
+        const page = this.state.page
+        const rowsPerPage = this.state.rowsPerPage
+
         return (
             <div className="format-table">
-                <TableContainer>
+                <TableContainer style={{maxHeight: "300px"}}>
                     <Toolbar>
                         <Typography variant="h6" color="primary">
                             App Servers
@@ -186,7 +199,7 @@ export default class ServersTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.rows
+                            {this.state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell>{row.name}</TableCell>
@@ -207,6 +220,15 @@ export default class ServersTable extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={this.state.rows.length}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangePerPage}
+                />
             </div>
         )
     }

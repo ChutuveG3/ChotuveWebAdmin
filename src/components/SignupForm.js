@@ -51,6 +51,7 @@ class SignupForm extends Component {
     onSubmit = async e => {
         e.preventDefault();
         e.persist()
+        this.setState({errors: {}})
         const valid = await validateData({...this.state})
         if (valid === true) {
             console.log('Success login')
