@@ -31,7 +31,7 @@ export default class ServersInfo extends Component {
                             <Button
                                 endIcon={<OpenInNewIcon/>}
                             >
-                                <h3>Server Stats</h3>
+                                <h3>Live Server Stats</h3>
                             </Button>
                         </Link>
                     </div>
