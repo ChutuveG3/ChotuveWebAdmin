@@ -12,7 +12,7 @@ import classes from "react-bootstrap/cjs/Popover";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Swal from "sweetalert2";
 import {appApi, authApi} from "../api/axios";
-import {showFail, showSuccess} from "../utilities/Alerts";
+import {showError, showSuccess} from "../utilities/Alerts";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Button} from "@material-ui/core";
 import PublishIcon from "@material-ui/icons/Publish";
@@ -183,7 +183,7 @@ export default class UsersTable extends Component{
                 console.log(err.response)
                 if (err.response.data.internal_code === "auth_server_error") {
                     this.setState({open: false})
-                    showFail('A user with that username or email already exists').then()
+                    showError('A user with that username or email already exists').then()
                 }
             })
     }
