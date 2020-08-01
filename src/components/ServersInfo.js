@@ -1,68 +1,44 @@
 import React, {Component} from "react";
 import {authApi} from "../api/axios";
+import ServersTable from "./ServersTable";
+import CountDisplay from "./CountDisplay";
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import Link from "@material-ui/core/Link";
+import {getSetting} from "../settings";
+import {Button} from "@material-ui/core";
 
-export class ServersInfo extends Component{
+export default class ServersInfo extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            successfulPost: false,
-            serverName: '',
-            error: {
-                serverName: ''
-            }
-        }
+        this.state = {rows: [], isLoading: true}
     }
-    postServer = e => {
-        e.preventDefault()
-        const options = {headers: {crossOrigin : true, withCredentials: false, authorization: localStorage.getItem('token')}}
 
-        return authApi.post('/servers', {server: this.state.serverName}, options)
+    componentDidMount() {
+        const headers = { headers: { authorization: localStorage.getItem("token")}}
+        authApi.get("/servers", headers)
             .then(res => {
-                this.setState({apiKey: res.data.api_key, successfulPost: true})
-            })
-            .catch(err => {
-                if (err.response.data.internal_code === "server_already_registered"){
-                    this.setState({error:{serverName : 'A server with that name already exists'}})
-                    return
-                }
-                console.log(err.response.data)
-            })
+                this.setState({rows: res.data.servers, isLoading: false})
+            }).catch(err => console.log(err))
     }
-    formValChange = e => {
-        e.preventDefault()
 
-        this.setState({
-            [e.target.name]: e.target.value,
-        })
-    };
     render() {
-        const {successfulPost, serverName, error} = this.state
-
-        if (successfulPost) return (<div>
-            <h3>This is your Api Key</h3>
-            <h5 style={{wordBreak: 'break-all' , marginTop: "50px", marginBottom: "50px", color: '#167bff'}}>{this.state.apiKey}</h5>
-            <p>You need to set it as an env variable for your app server</p>
-        </div>)
+        if (this.state.isLoading) return (<div className="loading-screen"><h3>Loading...</h3></div>)
         else return (
-            <form onSubmit={this.postServer}>
-                <h3>Register an App Server</h3>
-                <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        className={error.serverName.length > 0 ? "is-invalid form-control" : "form-control"}
-                        placeholder="Server name"
-                        name='serverName'
-                        value={serverName}
-                        onChange={this.formValChange}
-                        required
-                    />
-                    {error.serverName.length > 0 && (
-                        <span className="invalid-feedback">{error.serverName}</span>
-                    )}
+            <div>
+                <div className="fila">
+                    <div className="stats">
+                        <Link style={{textDecoration: 'none'}} href={getSetting('APP_BASE_URL')+'/status'} target="_blank" >
+                            <Button
+                                endIcon={<OpenInNewIcon/>}
+                            >
+                                <h3>Live Server Stats</h3>
+                            </Button>
+                        </Link>
+                    </div>
+                    <CountDisplay resource={'Servers'} count={this.state.rows.length}/>
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">Register</button>
-            </form>
-        );
+                <ServersTable rows={this.state.rows}/>
+            </div>
+        )
     }
 }

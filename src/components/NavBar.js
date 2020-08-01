@@ -14,9 +14,6 @@ export default class NavBar extends Component {
                     <IconButton style={{marginLeft: "auto", fontSize: "medium"}}>
                         <Link to={"/sign-in"}>Login</Link>
                     </IconButton>
-                    <IconButton style={{marginLeft: "10px", fontSize: "medium"}}>
-                        <Link to={"/sign-up"}>Sign up</Link>
-                    </IconButton>
                 </Toolbar>
             </AppBar>
         );

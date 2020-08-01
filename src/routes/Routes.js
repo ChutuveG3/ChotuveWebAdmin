@@ -7,14 +7,13 @@ import Signup from "../controllers/Signup";
 import {PrivateRoute} from "./PrivateRoute";
 import UsersInfo from "../components/UsersInfo";
 import VideoInfo from "../components/VideoInfo";
-import {ServersInfo} from "../components/ServersInfo";
-import Layout from "../components/Layout";
 import LoggedNavBar from "../components/LoggedNavBar";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Divider from "@material-ui/core/Divider";
 import {DrawerMenuList} from "../components/DrawerMenuList";
+import ServersInfo from "../components/ServersInfo";
 
 class Routes extends Component {
     constructor(props) {
@@ -33,12 +32,12 @@ class Routes extends Component {
       return (
           <Router >
               <div className="App">
-                  <Route exact path={['/home/users', '/home/videos', '/home/servers']}>
+                  <Route exact path={['/users', '/videos', '/servers']}>
                       <LoggedNavBar menuAction={this.toggleDrawer}/>
                       <div>
-                          <PrivateRoute url='/home/users/' view={<UsersInfo/>} />
-                          <PrivateRoute url='/home/videos/' view={<VideoInfo/>} />
-                          <PrivateRoute url='/home/servers/' view={<Layout component = {<ServersInfo/>}/>} />
+                          <PrivateRoute url='/users/' view={<UsersInfo/>} />
+                          <PrivateRoute url='/videos/' view={<VideoInfo/>} />
+                          <PrivateRoute url='/servers/' view={<ServersInfo/>}/>
                       </div>
                       <SwipeableDrawer
                           className="drawer"
@@ -57,7 +56,7 @@ class Routes extends Component {
                       </SwipeableDrawer>
                   </Route>
                   <Route exact path='/' render = { props => localStorage.getItem('token') ?
-                        <Redirect to={{pathname: "/home/users"}}/> :
+                        <Redirect to={{pathname: "/users"}}/> :
                         <Login {...props}/>}
                   />
                   <Route exact path="/sign-in" component={Login} />

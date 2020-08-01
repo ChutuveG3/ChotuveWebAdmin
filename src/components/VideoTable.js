@@ -23,6 +23,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextField from "@material-ui/core/TextField";
+import {showSuccess} from "../utilities/Alerts";
 
 export default class VideoTable extends Component{
     constructor(props) {
@@ -38,7 +39,7 @@ export default class VideoTable extends Component{
         }
     }
 
-    async deleteVideo(video_id) {
+    deleteVideo = (video_id) => {
         const headers = {headers: {authorization: localStorage.getItem("token")}};
         const url = `/videos/${video_id}`;
         console.log(`delete video ${video_id}`);
@@ -56,33 +57,23 @@ export default class VideoTable extends Component{
 
             console.log(`delete video ${video_id} on app server`);
             appApi.delete(url, headers)
-                .then(res => {
+                .then(() => {
                     console.log(`delete video ${video_id} on media server`);
                     mediaApi.delete(url, headers)
                         .then( () => {
                             console.log('delete success')
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'The video has been deleted',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
+                            showSuccess('The video has been deleted')
                         }).catch(err => console.log(err));
                 }).catch(err => {
-                if ((err.response.status === 409)) {
-                    console.log(`delete video ${video_id} on media server`);
-                    mediaApi.delete(url, headers)
-                        .then(() => {
-                            console.log('delete success')
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'The video has been deleted',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                        }).catch(err => console.log(err));
-                }
-                else console.log(err)
+                    if (err.response.status === 409) {
+                        console.log(`delete video ${video_id} on media server`);
+                        mediaApi.delete(url, headers)
+                            .then(() => {
+                                console.log('delete success')
+                                showSuccess('The video has been deleted')
+                            }).catch(err => console.log(err));
+                    }
+                    else console.log(err)
                 });
         })
     }
@@ -108,17 +99,11 @@ export default class VideoTable extends Component{
                 file_name: this.state.fileName,
                 file_size: this.state.fileSize
             }, headers)
-            .then(res => {
-                if (res.status === 201) {
-                    console.log("Upload video success")
-                    this.setState({open: false})
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'The video has been uploaded',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => Promise.resolve())
-                }
+            .then(() => {
+                console.log("Upload video success")
+                this.setState({open: false})
+                showSuccess('The video has been uploaded')
+                    .then(() => Promise.resolve())
             })
             .catch(err => {
                 console.log(err.response.data)
